@@ -1,4 +1,5 @@
 from timeclock.src import(
     database,
-    time_instance
+    time_instance,
+    cmd_reader
 )
