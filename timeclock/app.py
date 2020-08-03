@@ -49,6 +49,9 @@ def main():
         else:
             print('Operation aborted')
 
+    else:
+        print('Argument unrecognized, no action was taken')
+
 def _test():
     db = timeclock.src.database.DataBase
     inst = timeclock.src.time_instance.TimeInstance
