@@ -85,30 +85,39 @@ class TimeInstance:
 
         return self
 
-    def get_status(self):
+    def get_status(self, print_msg=True):
         if self.data == '':
-            print('Work status: out')
+            if print_msg == True:
+                print('Work status: out')
+            else:
+                return 'out'
 
         elif self.data['breaks'] != []:
+            if print_msg == True:
 
-            if self.data['breaks'][-1]['off_break'] == None:
-                print(
-                    f'''Work status: on_break\nnotes: {
-                        self.data['breaks'][-1]['notes']
-                    }'''
-                )
- 
-            else:
-                print(
-                    f'''Work status: in\nlast break at {
-                        datetime.datetime.fromtimestamp(
-                            self.data['breaks'][-1]['off_break']
-                        ).strftime('%H:%M:%S')
-                    }'''
-                )
+                if self.data['breaks'][-1]['off_break'] == None:
+                    print(
+                        f'''Work status: on_break\nnotes: {
+                            self.data['breaks'][-1]['notes']
+                        }'''
+                    )
+    
+                else:
+                    print(
+                        f'''Work status: in\nlast break at {
+                            datetime.datetime.fromtimestamp(
+                                self.data['breaks'][-1]['off_break']
+                            ).strftime('%H:%M:%S')
+                        }'''
+                    )
+            else:            
+                return 'on_break'
 
         else:
-            print('Work status: in')
+            if print_msg==True:
+                print('Work status: in')
+            else:
+                return 'in'
 
     def from_json(self):
         with open(self.json_path, 'r') as f:

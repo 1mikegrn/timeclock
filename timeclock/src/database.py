@@ -58,6 +58,9 @@ class DataBase:
 
     def commit_time_instance(self, TimeInstance, clear=True):
 
+        if TimeInstance.get_status(print_msg=False) == 'on_break':
+            TimeInstance = TimeInstance.off_break()
+
         break_id = self._break_log()
 
         columns = [x for x in TimeInstance.data.keys() if x != 'breaks']
