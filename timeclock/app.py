@@ -11,7 +11,7 @@ def main():
     inst = timeclock.src.time_instance.TimeInstance
     db = timeclock.src.database.DataBase
 
-    if cmd == 'status':
+    if cmd in ['status', 's']:
         inst().from_json().get_status()
 
     elif cmd in ['in', 'n']:

@@ -9,7 +9,7 @@ This CLI tool provides basic logging functionality for time at work. Data collec
 The tool is initialized from the command line via the keyword `clk`. The first entry after `clk` corresponds to one of the command arguments for getting the current clock status, clocking in, clocking out, clocking on_break, clocking off_break, getting the database, and getting the break log. Each argument has a few variants which can be chosen from the list of options below:
 
 ```text
-get current status: ['clk status']
+get current status: ['clk status', 'clk s']
 clock in: ['clk in', 'clk n']
 clock out: ['clk out', 'clk o']
 go on break: ['clk on_break', 'clk +b']
