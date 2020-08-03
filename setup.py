@@ -10,6 +10,7 @@ setup(
     name='timeclock',
     version='0.1.0',
     description='CLI tool for logging productivity',
+    long_description=long_description,
     author = 'Michael Green',
     author_email = '1mikegrn@gmail.com',
 
