@@ -1,5 +1,3 @@
 import timeclock
 
-
-
-timeclock.app.main()
+timeclock.app._test()

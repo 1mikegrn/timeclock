@@ -8,13 +8,13 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='timeclock',
-    version='0.0.1',
+    version='0.1.0',
     description='CLI tool for logging productivity',
     author = 'Michael Green',
     author_email = '1mikegrn@gmail.com',
 
     classifiers = [
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
     ],
 
@@ -29,11 +29,12 @@ setup(
     ],
 
     entry_points={
-        'console_scripts': ['clock=timeclock.app:main']
+        'console_scripts': ['clk=timeclock.app:main']
     },
 
     project_urls={
         'Webpage': 'https://1mikegrn.github.io/pages/timeclock/',
+        'Github': 'https://github.com/1mikegrn/timeclock/',
         'Personal Webpage': 'https://1mikegrn.github.io/',
     }
 )

@@ -1,4 +1,3 @@
-import time
 import datetime
 import json
 
@@ -15,53 +14,108 @@ class TimeInstance:
         )
 
     def time_in(self):
+        the_time = datetime.datetime.now()
+
         self.data = {
-            'date': datetime.datetime.today().strftime("%a %b %d %Y"),
-            'time_in': time.time(),
+            'date': the_time.strftime("%a %b %d %Y"),
+            'time_in': the_time.timestamp(),
             'time_out': None,
             'breaks': [],
             'break_delta': 0.0
         }
+
+        print(f"Clocked in at {the_time}")
+
         return self
 
     def time_out(self):
-        self.data['time_out'] = time.time()
+        the_time = datetime.datetime.now()
+
+        self.data['time_out'] = the_time.timestamp()
+
+        print(f"Clocked out at {the_time}")
+
         return self
 
     def on_break(self,  notes=None):
 
+        the_time = datetime.datetime.now()
+
+        assert self.data != '', ('Must be "in" work so to go "on_break"')
+
         if len(self.data['breaks']) > 0:
             assert self.data['breaks'][-1]['off_break'] != None, (
-                'can not start break without first ending previous break'
+                'cannot go "on_break" without first going "off_break"'
             )
 
         self.data['breaks'].append(
             {
             'notes': notes,
-            'on_break': time.time(),
+            'on_break': the_time.timestamp(),
             'off_break': None,
             'delta': 'pending...'
             }
         )
+
+        print(f"on break at {the_time}")
+
         return self
 
     def off_break(self):
-        assert self.data['breaks'][-1]['off_break'] == None, (
-            'can not end break without first initializing break'
+
+        assert self.data != '', (
+            'cannot go "off_break" without first being "in" work and "on_break"'
         )
 
-        off_time = time.time()
+        assert (
+            len(self.data['breaks']) > 0 
+            and self.data['breaks'][-1]['off_break'] == None), (
+            'cannot go "off_break" without first being "on_break".'
+        )
+
+        the_time = datetime.datetime.now()
 
         entry = self.data['breaks'][-1]
-        entry['off_break'] = off_time
-        entry['delta'] = off_time - entry['on_break']
+        entry['off_break'] = the_time.timestamp()
+        entry['delta'] = the_time.timestamp() - entry['on_break']
 
         self.data['break_delta'] += entry['delta']
+
+        print(f"off break at {the_time}")
+
         return self
+
+    def get_status(self):
+        if self.data == '':
+            print('Work status: out')
+
+        elif self.data['breaks'] != []:
+
+            if self.data['breaks'][-1]['off_break'] == None:
+                print(
+                    f'''Work status: on_break\nnotes: {
+                        self.data['breaks'][-1]['notes']
+                    }'''
+                )
+ 
+            else:
+                print(
+                    f'''Work status: in\nlast break at {
+                        datetime.datetime.fromtimestamp(
+                            self.data['breaks'][-1]['off_break']
+                        ).strftime('%H:%M:%S')
+                    }'''
+                )
+
+        else:
+            print('Work status: in')
 
     def from_json(self):
         with open(self.json_path, 'r') as f:
-            data = json.load(f)
+            try:
+                data = json.load(f)
+            except:
+                data = ''
         self.data = data
         return self
 

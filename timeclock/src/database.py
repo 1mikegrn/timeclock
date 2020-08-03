@@ -89,14 +89,44 @@ class DataBase:
         if clear == True:
             TimeInstance._clear_json()
 
-    def get_database(self):
-        with DataBaseManager(self.path) as sql:
-            table = pd.read_sql_query("SELECT * FROM timeclock", sql.conn)
-        return table
+    def get_database(self, output_format=None):
 
-    def get_break_log(self, break_id):
         with DataBaseManager(self.path) as sql:
-            table = pd.read_sql_query(f"SELECT * FROM {break_id}", sql.conn)
+            table = pd.read_sql_query(
+                "SELECT * FROM timeclock", 
+                sql.conn,
+                )
+
+        if output_format in ['epoch', 'e']:
+            return table
+        else:
+            return self._convert(table, ['time_in', 'time_out'])
+
+    def get_break_log(self, break_id, output_format):
+        with DataBaseManager(self.path) as sql:
+            table = pd.read_sql_query(
+                f"SELECT * FROM {break_id}", 
+                sql.conn,
+            )
+        if output_format in ['epoch', 'e', 'raw']:
+            return table
+        else:
+            return self._convert(table, ['on_break', 'off_break'])
+
+    def _convert(self, table, _convert_list):
+
+        for col in table.columns:
+            if col in _convert_list:
+                for idx in table[col].index:
+                    table.loc[idx, col] = datetime.datetime.fromtimestamp(
+                        table.loc[idx, col]
+                    ).strftime('%H:%M:%S')
+
+        for idx in table[table.columns[-1]].index:
+            table.loc[idx, col] = str(
+                datetime.timedelta(seconds=table.loc[idx, col])
+            )
+
         return table
 
     def _break_log(self):
@@ -146,6 +176,12 @@ class DataBase:
             DROP TABLE {name}
             """
         )
+
+    def _reset_db(self):
+        names = self._get_table_names()
+        for name in names:
+            self._drop_db(name)
+        self.create_db()
 
 
 if __name__ == "__main__":
