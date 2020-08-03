@@ -115,17 +115,16 @@ class DataBase:
 
     def _convert(self, table, _convert_list):
 
-        for col in table.columns:
-            if col in _convert_list:
-                for idx in table[col].index:
-                    table.loc[idx, col] = datetime.datetime.fromtimestamp(
-                        table.loc[idx, col]
-                    ).strftime('%H:%M:%S')
-
-        for idx in table[table.columns[-1]].index:
-            table.loc[idx, col] = str(
-                datetime.timedelta(seconds=table.loc[idx, col])
+        for col in _convert_list:
+            table[col] = table[col].apply(
+                lambda x: datetime.datetime.fromtimestamp(
+                    x
+                ).strftime('%H:%M:%S')
             )
+
+        table[table.columns[-1]] = table[table.columns[-1]].apply(
+            lambda x: datetime.timedelta(seconds=x)
+        )
 
         return table
 
