@@ -23,10 +23,11 @@ class TimeInstance:
             'time_out': None,
             'breaks': [],
             'break_delta': 0.0,
-            'work_delta': None,
+            'work_delta': 'pending...',
         }
 
-        print(f"Clocked in at {the_time}")
+        print(f"clocked in at {the_time}")
+        print(f"current project: {project}")
 
         return self
 
@@ -40,7 +41,7 @@ class TimeInstance:
             - self.data['break_delta']
         )
 
-        print(f"Clocked out at {the_time}")
+        print(f"clocked out at {the_time}")
 
         return self
 
@@ -113,7 +114,9 @@ class TimeInstance:
             else:
                 if print_msg == True:
                     print(
-                        f'''Work status: in\nlast break at {
+                        f'''Work status: in\ncurrent project: {
+                                self.data['project']
+                        }\nlast break at {
                             datetime.datetime.fromtimestamp(
                                 self.data['breaks'][-1]['off_break']
                             ).strftime('%H:%M:%S')
@@ -124,7 +127,12 @@ class TimeInstance:
 
         else:
             if print_msg==True:
-                print('Work status: in')
+                print(
+                    f'''Work status: in\ncurrent project: {
+                        self.data['project']
+                    }'''
+                )
+
             else:
                 return 'in'
 
