@@ -13,12 +13,12 @@ class TimeInstance:
             'persist.json'
         )
 
-    def time_in(self, task=None):
+    def time_in(self, project=None):
         the_time = datetime.datetime.now()
 
         self.data = {
             'date': the_time.strftime("%a %b %d %Y"),
-            'task': task,
+            'project': project,
             'time_in': the_time.timestamp(),
             'time_out': None,
             'breaks': [],

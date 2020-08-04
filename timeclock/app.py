@@ -53,7 +53,9 @@ def main():
     else:
         print('Argument unrecognized, no action was taken')
 
-def _test():
+
+if __name__ == "__main__":
+    
     db = timeclock.src.database.DataBase
     inst = timeclock.src.time_instance.TimeInstance
 
@@ -87,6 +89,3 @@ def _test():
 
     db()._reset_db()
     inst()._clear_json()
-
-if __name__ == "__main__":
-    _test()

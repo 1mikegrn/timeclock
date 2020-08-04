@@ -47,7 +47,7 @@ class DataBase:
             CREATE TABLE IF NOT EXISTS timeclock (
                 id INTEGER PRIMARY KEY,
                 date TEXT,
-                task TEXT,
+                project TEXT,
                 time_in REAL,
                 time_out REAL,
                 break_log TEXT,
