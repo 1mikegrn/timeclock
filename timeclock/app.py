@@ -15,7 +15,8 @@ def main():
         inst().from_json().get_status()
 
     elif cmd in ['in', 'n']:
-        inst().time_in().to_json()
+        message = options['-m'] if '-m' in options else None
+        inst().time_in(message).to_json()
 
     elif cmd in ['out', 'o']:
         db().commit_time_instance(
@@ -56,7 +57,7 @@ def _test():
     db = timeclock.src.database.DataBase
     inst = timeclock.src.time_instance.TimeInstance
 
-    inst().time_in().to_json()
+    inst().time_in('Crunch').to_json()
 
     inst().from_json().on_break('meeting').to_json()
     time.sleep(0.5)
@@ -76,7 +77,8 @@ def _test():
     db().commit_time_instance(out, clear=False)
 
     table = db().get_database()
-    logs = db().get_break_log(table['break_log'].iloc[-1], None)
+    
+    logs = db().get_break_log(table['break_log'].iloc[0], 'e')
 
     print('\n')
     print(table)

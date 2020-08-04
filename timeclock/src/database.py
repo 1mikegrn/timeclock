@@ -47,10 +47,12 @@ class DataBase:
             CREATE TABLE IF NOT EXISTS timeclock (
                 id INTEGER PRIMARY KEY,
                 date TEXT,
+                task TEXT,
                 time_in REAL,
                 time_out REAL,
                 break_log TEXT,
-                break_delta REAL
+                break_delta REAL,
+                work_delta REAL
             )
             """
         )
@@ -103,7 +105,11 @@ class DataBase:
         if output_format in ['epoch', 'e']:
             return table
         else:
-            return self._convert(table, ['time_in', 'time_out'])
+            return self._convert(
+                table, 
+                ['time_in', 'time_out'], 
+                ['break_delta', 'work_delta']
+            )
 
     def get_break_log(self, break_id, output_format):
         with DataBaseManager(self.path) as sql:
@@ -111,23 +117,28 @@ class DataBase:
                 f"SELECT * FROM {break_id}", 
                 sql.conn,
             )
-        if output_format in ['epoch', 'e', 'raw']:
+        if output_format in ['epoch']:
             return table
         else:
-            return self._convert(table, ['on_break', 'off_break'])
+            return self._convert(
+                table, 
+                ['on_break', 'off_break'], 
+                ['delta']
+            )
 
-    def _convert(self, table, _convert_list):
+    def _convert(self, table, _convert_times, _covert_deltas):
 
-        for col in _convert_list:
+        for col in _convert_times:
             table[col] = table[col].apply(
                 lambda x: datetime.datetime.fromtimestamp(
                     x
                 ).strftime('%H:%M:%S')
             )
 
-        table[table.columns[-1]] = table[table.columns[-1]].apply(
-            lambda x: datetime.timedelta(seconds=x)
-        )
+        for col in _covert_deltas:
+            table[col] = table[col].apply(
+                lambda x: datetime.timedelta(seconds=x)
+            )
 
         return table
 

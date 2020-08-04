@@ -23,7 +23,7 @@ flagged arguments can be passed to the previous commands through `-flag arg` syn
 
 `-id <ID>` *must* be tagged to `clk get_logs` so to acquire the corresponding break log. These ID's can be found in the database under the `break_log` attribute.
 
-`-m "notes"` can be tagged to `clk on_break` to add a text string to the break instance. If not provided defaults to `None`.
+`-m "<STRING>"` can be tagged to `clk in` or `clk on_break` so to add descriptive text strings to the instances. `clk in -m <STRING>` adds a string to the `task` attribute of the database, and is meant for denoting work tasks. `clk on_break -m <STRING>` adds a string to  the `notes` attribute of the break log, and is meant for denoting break activities. If flag is not provided, data entries default to `None`.
 
 `-f <t>` can be tagged to both `clk get_db` and `clk get_logs` so to display time in specific formats (database stores epoch time but converts to an (%H:%M:%S) string for display by default). Current `<t>` options are:
 

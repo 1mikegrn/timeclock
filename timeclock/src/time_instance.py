@@ -13,15 +13,17 @@ class TimeInstance:
             'persist.json'
         )
 
-    def time_in(self):
+    def time_in(self, task=None):
         the_time = datetime.datetime.now()
 
         self.data = {
             'date': the_time.strftime("%a %b %d %Y"),
+            'task': task,
             'time_in': the_time.timestamp(),
             'time_out': None,
             'breaks': [],
-            'break_delta': 0.0
+            'break_delta': 0.0,
+            'work_delta': None,
         }
 
         print(f"Clocked in at {the_time}")
@@ -32,6 +34,11 @@ class TimeInstance:
         the_time = datetime.datetime.now()
 
         self.data['time_out'] = the_time.timestamp()
+        self.data['work_delta'] = (
+            self.data['time_out'] 
+            - self.data['time_in'] 
+            - self.data['break_delta']
+        )
 
         print(f"Clocked out at {the_time}")
 
