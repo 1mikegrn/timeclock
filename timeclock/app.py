@@ -2,7 +2,7 @@ import sys
 import time
 from os import path
 
-# sys.path.insert(0, path.split(path.abspath(path.dirname(__file__)))[0])
+sys.path.insert(0, path.split(path.abspath(path.dirname(__file__)))[0])
 import timeclock
 
 def main():
@@ -76,7 +76,6 @@ def _test():
     db().commit_time_instance(out, clear=False)
 
     table = db().get_database()
-
     logs = db().get_break_log(table['break_log'].iloc[-1], None)
 
     print('\n')
@@ -87,5 +86,5 @@ def _test():
     db()._reset_db()
     inst()._clear_json()
 
-# if __name__ == "__main__":
-#     _test()
+if __name__ == "__main__":
+    _test()

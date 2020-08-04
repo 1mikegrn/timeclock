@@ -93,16 +93,18 @@ class TimeInstance:
                 return 'out'
 
         elif self.data['breaks'] != []:
-            if print_msg == True:
 
-                if self.data['breaks'][-1]['off_break'] == None:
+            if self.data['breaks'][-1]['off_break'] == None:
+                if print_msg == True:
                     print(
                         f'''Work status: on_break\nnotes: {
                             self.data['breaks'][-1]['notes']
                         }'''
                     )
-    
                 else:
+                    return 'on_break'
+            else:
+                if print_msg == True:
                     print(
                         f'''Work status: in\nlast break at {
                             datetime.datetime.fromtimestamp(
@@ -110,8 +112,8 @@ class TimeInstance:
                             ).strftime('%H:%M:%S')
                         }'''
                     )
-            else:            
-                return 'on_break'
+                else:            
+                    return 'in'
 
         else:
             if print_msg==True:
